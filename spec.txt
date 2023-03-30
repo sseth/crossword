@@ -1,0 +1,73 @@
+ui elements
+- (done) nxn grid with clue number labels
+- clue boxes
+- (done) active clue display?
+- menu?
+- timer
+- pause button
+- check + reveal dropdown w cell/word/grid options
+  (or check + reveal buttons w a cell/word/grid dropdown)
+- enable/disable on-screen keyboard
+
+core functionality
+- highlight active cell (leftmost cell in top row by default)
+
+- shade other cells corresponding to active clue (1 across by default)
+
+- clue boxes (TODO) 
+  - click clue to make active
+  - press up/down to cycle, wrap around
+  - highlight active clue
+  - mark/differently highlight inactive clue
+
+- timer (TODO) 
+  - click timer or pause button to pause timer
+  - auto pause when window/tab not in focus
+
+- grid navigation (DONE)
+  - on click:
+    - if clicked cell is blank, do nothing, else
+    - make clicked cell active
+    - highlight clue based on previous state (across/down)
+  - arrow keys to move
+    - move u/d on uarrow/darrow if down clue active
+    - move l/r on larrow/rarrow if across clue active
+    - skip over black cells
+    - stop at edges (option to wrap around?)
+    - toggle active axis on u/d when across or l/r when down
+  - space to toggle active axis
+  - tab/enter to move to next clue
+  - shift + tab/enter to move to prev clue
+  - (same rules as text entry to determine next active cell)
+
+- text entry (MOSTLY DONE)
+  - ignore keypresses that are not alpha or enter/tab/plus
+  - on keypress, fill active cell and
+    - if in rebus mode, stay in cell, else (TODO)
+    - if active clue partially filled, move to first empty cell, else
+    - move to next cell in active direction 
+    - if next cell filled, move to next empty cell
+      - optionally, move to next cell anyway (TODO)
+    - if active cell is end of active clue
+      - move to first empty cell in next unfilled clue in active direction
+      - optionally, move to first cell of next clue (TODO)
+    - wrap around to beginning from end
+  - pop completed message when all cells correctly filled
+
+- f5 to clear grid + reset timer (DONE)
+
+- save progress (TODO)
+
+utilities
+- build crossword
+  - empty grid
+  - enter letters and blanks
+  - add clue number labels and clues
+  - import from puz/xml?
+- generate grid given a list of clues?
+
+for later:
+- rebuses
+- circled and shaded cells
+- highlight linked clues
+- option to move to next clue at the end of a word
