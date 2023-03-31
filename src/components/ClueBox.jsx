@@ -20,7 +20,7 @@ const ClueBox = ({ clue }) => {
   return (
     <div
       ref={clueBoxRef}
-      className="mt-3 h-fit bg-blue-200 pl-10 pr-5 py-3 text-lg"
+      className="mt-3 h-fit w-full bg-blue-200 py-3 pl-10 pr-5 text-lg"
     >
       {`${clue.num}. ${clue.text}`}
     </div>

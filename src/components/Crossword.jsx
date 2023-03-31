@@ -5,7 +5,8 @@ import { cells, across, down } from "./xwd";
 import Grid from "./Grid";
 import ClueBox from "./ClueBox";
 import ClueList from "./ClueList";
-import Timer from "./Timer";
+// import Timer from "./Timer";
+import Menu from "./Menu";
 
 const gridInit = [];
 let r = [];
@@ -34,7 +35,10 @@ const GRID_START = cells.findIndex((cell) => cell.letter !== null);
 
 const Crossword = () => {
   // console.log('rendering');
-  const [grid, setGrid] = useState(gridInit);
+  const prevGridState = localStorage.getItem("grid");
+  const [grid, setGrid] = useState(
+    prevGridState ? JSON.parse(prevGridState) : gridInit
+  );
   const rowInit = Math.floor(GRID_START / N);
   const [row, setRow] = useState(rowInit);
   const colInit = GRID_START % N;
@@ -73,10 +77,10 @@ const Crossword = () => {
     const direction = flip ? !dir : dir;
     const currentClue = targetClue
       ? targetClue
-      : (direction
-          ? across[clue.num]
-          : down[clue.num]);
-    
+      : direction
+      ? across[clue.num]
+      : down[clue.num];
+
     const step = direction ? 1 : N;
     const end = currentClue.start + currentClue.answer.length * step;
     let nextCellNum = targetClue ? end : activeCell.id + step;
@@ -117,6 +121,13 @@ const Crossword = () => {
       return downKeys[
         downKeys.findIndex((n) => n == clue.num) + (prev ? -1 : 1)
       ];
+  };
+
+  const clearGrid = () => {
+    if (window.confirm("Reset?")) {
+      setResetTimer(true);
+      setGrid(gridInit);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -199,13 +210,10 @@ const Crossword = () => {
       // case '+': (TODO: rebus)
 
       case "F5":
-        if (window.confirm("Reset?")) {
-          setResetTimer(true);
-          setGrid(gridInit);
-        }
-        return;
+        return clearGrid();
 
       default:
+        if (e.metaKey) return;
         if (e.keyCode >= 65 && e.keyCode <= 90) {
           setGrid(
             grid.map((r, i) => {
@@ -254,9 +262,24 @@ const Crossword = () => {
     return () => clearTimeout(timer);
   }, [grid]);
 
+  useEffect(() => {
+    localStorage.setItem("grid", JSON.stringify(grid));
+  }, [grid]);
+
   return (
     <div className="overflow-hidden">
-      <Timer reset={resetTimer} setReset={setResetTimer} />
+      <Menu
+        dir={dir}
+        // clue={dir ? across[clue.num] : down[clue.num]}
+        clue={clue}
+        grid={grid}
+        cell={activeCell}
+        setGrid={setGrid}
+        setSolved={setSolved}
+        clearGrid={clearGrid}
+        resetTimer={resetTimer}
+        setResetTimer={setResetTimer}
+      />
       <ClueBox clue={clue} />
       <div
         tabIndex={0}
@@ -264,7 +287,13 @@ const Crossword = () => {
         className="ml-6 mt-2 flex w-screen gap-7 p-3 focus:outline-none"
       >
         <Grid grid={grid} getBg={getBg} click={handleClick} />
-        <ClueList dir={dir} clue={clue} />
+        <ClueList
+          dir={dir}
+          clue={clue}
+          cell={activeCell}
+          moveToCell={moveTo}
+          getCell={nextActiveCell}
+        />
       </div>
     </div>
   );

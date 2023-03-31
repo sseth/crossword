@@ -1,10 +1,10 @@
 ui elements
 - (done) nxn grid with clue number labels
-- clue boxes
+- (done) clue boxes
 - (done) active clue display?
 - menu?
-- timer
-- pause button
+- (done) timer
+- (done) pause button
 - check + reveal dropdown w cell/word/grid options
   (or check + reveal buttons w a cell/word/grid dropdown)
 - enable/disable on-screen keyboard
@@ -14,17 +14,16 @@ core functionality
 
 - shade other cells corresponding to active clue (1 across by default)
 
-- clue boxes (TODO) 
+- clue boxes
   - click clue to make active
-  - press up/down to cycle, wrap around
   - highlight active clue
   - mark/differently highlight inactive clue
 
-- timer (TODO) 
+- timer
   - click timer or pause button to pause timer
-  - auto pause when window/tab not in focus
+  - auto pause when window/tab not in focus (TODO)
 
-- grid navigation (DONE)
+- grid navigation
   - on click:
     - if clicked cell is blank, do nothing, else
     - make clicked cell active
@@ -37,10 +36,11 @@ core functionality
     - toggle active axis on u/d when across or l/r when down
   - space to toggle active axis
   - tab/enter to move to next clue
-  - shift + tab/enter to move to prev clue
-  - (same rules as text entry to determine next active cell)
+    - shift + tab/enter to move to prev clue
+    - (same rules as text entry to determine next active cell)
+    - option to skip over filled clues (TODO)
 
-- text entry (MOSTLY DONE)
+- text entry
   - ignore keypresses that are not alpha or enter/tab/plus
   - on keypress, fill active cell and
     - if in rebus mode, stay in cell, else (TODO)
@@ -54,9 +54,9 @@ core functionality
     - wrap around to beginning from end
   - pop completed message when all cells correctly filled
 
-- f5 to clear grid + reset timer (DONE)
+- f5 to clear grid + reset timer
 
-- save progress (TODO)
+- save progress
 
 utilities
 - build crossword
