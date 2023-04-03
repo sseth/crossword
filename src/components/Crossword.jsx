@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 
 import { cells, across, down } from "./xwd";
 
@@ -20,7 +20,9 @@ cells.forEach((cell, i) => {
     if (down[label]) down[label].start = i;
   }
   cell.input = null;
+  // cell.ref = null;
   cell.isBlank = cell.letter === null;
+  cell.incorrect = false;
   r.push(cell);
   if ((i + 1) % 15 === 0) {
     gridInit.push(r);
@@ -39,6 +41,12 @@ const Crossword = () => {
   const [grid, setGrid] = useState(
     prevGridState ? JSON.parse(prevGridState) : gridInit
   );
+  // const gridRefs = gridInit.map((r) => r.map((c) => useRef()));
+  // const withRefs = (g) =>
+  // g.map((r, i) => r.map((c, j) => ({ ...c, ref: gridRefs[i][j] })));
+  // const [grid, setGrid] = useState(
+  // prevGridState ? withRefs(JSON.parse(prevGridState)) : withRefs(gridInit)
+  // );
   const rowInit = Math.floor(GRID_START / N);
   const [row, setRow] = useState(rowInit);
   const colInit = GRID_START % N;
@@ -127,6 +135,7 @@ const Crossword = () => {
     if (window.confirm("Reset?")) {
       setResetTimer(true);
       setGrid(gridInit);
+      // setGrid(withRefs(gridInit));
     }
   };
 
@@ -152,11 +161,13 @@ const Crossword = () => {
 
       case "Backspace":
         setGrid(
-          grid.map((r, i) => {
-            return r.map((cell, j) =>
-              row === i && col === j ? { ...cell, input: null } : cell
-            );
-          })
+          grid.map((r, i) =>
+            r.map((cell, j) =>
+              row === i && col === j
+                ? { ...cell, input: null }
+                : cell
+            )
+          )
         );
         return dir ? moveTo(row, col - 1) : moveTo(row - 1, col);
 
@@ -218,7 +229,7 @@ const Crossword = () => {
           setGrid(
             grid.map((r, i) => {
               return r.map((cell, j) =>
-                row === i && col === j ? { ...cell, input: e.key } : cell
+                row === i && col === j ? { ...cell, input: e.key, incorrect: false } : cell
               );
             })
           );
@@ -264,15 +275,17 @@ const Crossword = () => {
 
   useEffect(() => {
     localStorage.setItem("grid", JSON.stringify(grid));
+    // localStorage.setItem(
+    //   "grid",
+    //   JSON.stringify(grid.map((r) => r.map((c) => ({ ...c, ref: null }))))
+    // );
   }, [grid]);
 
   return (
     <div className="overflow-hidden">
       <Menu
         dir={dir}
-        // clue={dir ? across[clue.num] : down[clue.num]}
         clue={clue}
-        grid={grid}
         cell={activeCell}
         setGrid={setGrid}
         setSolved={setSolved}

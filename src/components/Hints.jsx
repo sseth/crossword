@@ -18,10 +18,12 @@ const Hints = ({ menuProps }) => {
         );
       case "word":
         return setGrid((grid) =>
-          grid.map((r, i) => {
-            return r.map((c, j) => {
-              const cond = dir ? clue.num === c.across : clue.num === c.down;
-              return cond ? { ...c, input: c.letter } : c;
+          grid.map((r) => {
+            return r.map((c) => {
+              const isCurrentWord = dir
+                ? clue.num === c.across
+                : clue.num === c.down;
+              return isCurrentWord ? { ...c, input: c.letter } : c;
             });
           })
         );
@@ -34,25 +36,53 @@ const Hints = ({ menuProps }) => {
   };
 
   const check = () => {
-    console.log("check", hintType);
     switch (hintType) {
       case "letter":
+        return setGrid((grid) =>
+          grid.map((r) =>
+            r.map((c) => {
+              if (c === cell && c.input && c.input !== c.letter)
+                return { ...c, incorrect: true };
+              return c;
+            })
+          )
+        );
       case "word":
+        return setGrid((grid) =>
+          grid.map((r) => {
+            return r.map((c) => {
+              if (c.input && c.input !== c.letter) {
+                const isCurrentWord = dir
+                  ? clue.num === c.across
+                  : clue.num === c.down;
+                return isCurrentWord ? { ...c, incorrect: true } : c;
+              }
+              return c;
+            });
+          })
+        );
       case "grid":
-      default:
-        return;
+        return setGrid((grid) =>
+          grid.map((r) =>
+            r.map((c) => {
+              if (c.input && c.input !== c.letter)
+                return { ...c, incorrect: true };
+              return c;
+            })
+          )
+        );
     }
   };
 
   return (
     <div className="flex gap-2">
-      <button onClick={reveal} className="border border-black px-1">
+      <button onClick={reveal} className="border border-black px-1" tabIndex={-1}>
         Reveal
       </button>
-      <button onClick={check} className="border border-black px-1">
+      <button onClick={check} className="border border-black px-1" tabIndex={-1}>
         Check
       </button>
-      <select value={hintType} onChange={handleSelect} className="px-2">
+      <select value={hintType} onChange={handleSelect} className="px-2" tabIndex={-1}>
         <option value="letter">Letter</option>
         <option value="word">Word</option>
         <option value="grid">Grid</option>
@@ -62,21 +92,3 @@ const Hints = ({ menuProps }) => {
 };
 
 export default Hints;
-
-// return setGrid((grid) =>
-//   grid.map((r, i) => {
-//     return r.map((c, j) => {
-//       const clueNum = dir ? across[c];
-//       const x = dir ? i : j;
-//       const y = dir ? j : i;
-//       // TODO: change to N
-//       const line = dir ? Math.floor(cell.id / 15) : cell.id % 15;
-//       const start = dir ? Math.floor(clue.start / 15) : clue.start % 15;
-//       const end = start + clue.answer.length;
-//       // console.log(`line: ${line}\nstart: ${start}\nend: ${end}`);
-//       return x == line && y >= start && y < end
-//         ? { ...c, input: c.letter }
-//         : c;
-//     });
-//   })
-// );

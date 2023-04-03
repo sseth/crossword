@@ -57,7 +57,7 @@ const Timer = ({ menuProps }) => {
 
   // old styles: mt-3 w-fit bg-blue-200 px-5 py-3 leading-[27px]
   return (
-    <div onClick={toggleTimer} className="">
+    <div onClick={toggleTimer}>
       {display}
     </div>
   );

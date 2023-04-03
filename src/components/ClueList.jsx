@@ -11,18 +11,27 @@ const downList = Object.keys(down).map((n) => ({
   text: down[n].text,
 }));
 
-const ClueList = ({ dir, clue: activeClue, cell, getCell, moveToCell }) => {
+const ClueList = ({
+  dir,
+  clue: activeClue,
+  cell,
+  getCell,
+  moveToCell,
+}) => {
   // console.log('rendering clue list');
   const activeClueRef = useRef();
   const otherClueRef = useRef();
+  const acrossListRef = useRef();
+  const downListRef = useRef();
 
-  const moveTo = (clue, isAcrossClue) =>
+  const moveTo = (clue, isAcrossClue) => {
     moveToCell(
       ...getCell(
         isAcrossClue ? across[clue.num] : down[clue.num],
         dir !== isAcrossClue
       )
     );
+  }
 
   const getRef = (clue, across) => {
     if (dir === across)
@@ -34,23 +43,35 @@ const ClueList = ({ dir, clue: activeClue, cell, getCell, moveToCell }) => {
   const getBg = (clue, across) => {
     if (dir === across) return clue.num == activeClue.num ? "bg-blue-200" : "";
     if (dir && clue.num == cell.down) return "bg-[#ccc]";
-    if (!dir && clue.num == cell.across) return "bg-[#ccc]"; 
+    if (!dir && clue.num == cell.across) return "bg-[#ccc]";
     return "";
   };
 
   useEffect(() => {
-    // TODO: don't scroll if clue already visible
     if (activeClueRef.current) activeClueRef.current.scrollIntoView();
     if (otherClueRef.current) otherClueRef.current.scrollIntoView();
+
+    // TODO: don't scroll if clue already visible
+    // if (!activeClueRef.current) return;
+    // if (dir) {
+    //   console.log(activeClueRef.current);
+    //   // console.log(acrossListRef.current);
+    //   acrossListRef.current.scrollTo(0, activeClueRef.current.scrollHeight);
+    //   // acrossListRef.current.scrollTo(0, 500);
+    //   downListRef.current.scrollTo(0, otherClueRef.current.scrollTop);
+    // } else {
+    //   downListRef.current.scrollTo(0, activeClueRef.current.scrollTop);
+    //   acrossListRef.current.scrollTo(0, otherClueRef.current.scrollTop);
+    // }
   }, [activeClue]);
 
   const listStyles = "mb-3 p-2 h-[330px] w-[400px] overflow-scroll";
 
   return (
-    <div className="foc mt-[10px] h-full" tabIndex={-1}>
+    <div className="foc mt-[10px] h-full">
       <div>
         <div className="mb-2 border-b text-lg font-bold">Across</div>
-        <div className={listStyles}>
+        <div ref={acrossListRef} className={listStyles}>
           {acrossList.map((clue) => (
             <div
               key={clue.num}
@@ -66,7 +87,7 @@ const ClueList = ({ dir, clue: activeClue, cell, getCell, moveToCell }) => {
       </div>
       <div>
         <div className="mb-2 border-b text-lg font-bold">Down</div>
-        <div className={listStyles}>
+        <div ref={downListRef} className={listStyles}>
           {downList.map((clue) => (
             <div
               key={clue.num}

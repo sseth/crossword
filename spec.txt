@@ -2,11 +2,11 @@ ui elements
 - (done) nxn grid with clue number labels
 - (done) clue boxes
 - (done) active clue display?
-- menu?
+- menu
 - (done) timer
 - (done) pause button
-- check + reveal dropdown w cell/word/grid options
-  (or check + reveal buttons w a cell/word/grid dropdown)
+- (done) reveal
+- check
 - enable/disable on-screen keyboard
 
 core functionality
