@@ -6,7 +6,7 @@ ui elements
 - (done) timer
 - (done) pause button
 - (done) reveal
-- check
+- (done) check
 - enable/disable on-screen keyboard
 
 core functionality

@@ -13,7 +13,7 @@ const Hints = ({ menuProps }) => {
       case "letter":
         return setGrid((grid) =>
           grid.map((r) =>
-            r.map((c) => (c === cell ? { ...c, input: c.letter } : c))
+            r.map((c) => (c === cell ? { ...c, input: c.letter, incorrect: false } : c))
           )
         );
       case "word":
@@ -23,13 +23,13 @@ const Hints = ({ menuProps }) => {
               const isCurrentWord = dir
                 ? clue.num === c.across
                 : clue.num === c.down;
-              return isCurrentWord ? { ...c, input: c.letter } : c;
+              return isCurrentWord ? { ...c, input: c.letter, incorrect: false } : c;
             });
           })
         );
       case "grid":
         setGrid((grid) =>
-          grid.map((r) => r.map((c) => ({ ...c, input: c.letter })))
+          grid.map((r) => r.map((c) => ({ ...c, input: c.letter, incorrect: false })))
         );
         return setSolved(true);
     }

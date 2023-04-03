@@ -56,6 +56,7 @@ const Crossword = () => {
   const [clue, setClue] = useState({ num: 1, text: across[1].text });
   const [solved, setSolved] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+  const [rebusMode, setRebusMode] = useState(false);
   // TODO? const [mistakeCount, setmistakeCount] = useState(0);
 
   const setActiveClue = (cell) => {
@@ -71,7 +72,7 @@ const Crossword = () => {
     if (y < 0 || y > N - 1) return;
     const newActive = grid[x][y];
     if (newActive.isBlank) return;
-
+    if (rebusMode) setRebusMode(false);
     setRow(x);
     setCol(y);
     setActiveCell(newActive);
@@ -164,11 +165,14 @@ const Crossword = () => {
           grid.map((r, i) =>
             r.map((cell, j) =>
               row === i && col === j
-                ? { ...cell, input: null }
+                ? { ...cell, input: null, incorrect: false }
                 : cell
             )
           )
         );
+        // if (rebusMode) {}; TODO
+        // if no/one letter in cell, clear and move left/down
+        // else clear last letter in cell and inc. font size
         return dir ? moveTo(row, col - 1) : moveTo(row - 1, col);
 
       case "Tab":
@@ -218,13 +222,17 @@ const Crossword = () => {
       case " ":
         return setDir(!dir);
 
-      // case '+': (TODO: rebus)
+      case '+':
+        return setRebusMode(true);
 
       case "F5":
         return clearGrid();
 
       default:
         if (e.metaKey) return;
+        // if (rebusMode) {}; TODO
+        // if num of letters in cell === cell max, return?
+        // dec. font size and append e.key to cell.input
         if (e.keyCode >= 65 && e.keyCode <= 90) {
           setGrid(
             grid.map((r, i) => {
@@ -237,7 +245,7 @@ const Crossword = () => {
           // TODO (option):
           // if current clue filled, move to first empty cell of next clue
         }
-        return;
+        // return;
     }
   };
 
