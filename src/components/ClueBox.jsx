@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 const ClueBox = ({ clue }) => {
   const clueBoxRef = useRef();

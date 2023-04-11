@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 
 import { cells, across, down } from "./xwd";
 
@@ -142,6 +142,7 @@ const Crossword = () => {
 
   const handleKeyDown = (e) => {
     let x = 1;
+    let c, cell;
     switch (e.key) {
       case "ArrowRight":
         if (!dir) return setDir(true);
@@ -178,7 +179,6 @@ const Crossword = () => {
       case "Tab":
       case "Enter":
         e.preventDefault();
-        let cell;
         if (dir) {
           if (!e.shiftKey) {
             const nextClue = across[getNextClue()];
@@ -212,17 +212,19 @@ const Crossword = () => {
         return moveTo(...cell);
 
       case "Home":
-        const first = dir ? across[clue.num].start : down[clue.num].start;
-        return moveTo(...getIndices(first));
+        return moveTo(
+          ...getIndices(dir ? across[clue.num].start : down[clue.num].start)
+        );
       case "End":
-        const c = dir ? across[clue.num] : down[clue.num];
-        const last = c.start + (c.answer.length - 1) * (dir ? 1 : N);
-        return moveTo(...getIndices(last));
+        c = dir ? across[clue.num] : down[clue.num];
+        return moveTo(
+          ...getIndices(c.start + (c.answer.length - 1) * (dir ? 1 : N))
+        );
 
       case " ":
         return setDir(!dir);
 
-      case '+':
+      case "+":
         return setRebusMode(true);
 
       case "F5":
@@ -237,7 +239,9 @@ const Crossword = () => {
           setGrid(
             grid.map((r, i) => {
               return r.map((cell, j) =>
-                row === i && col === j ? { ...cell, input: e.key, incorrect: false } : cell
+                row === i && col === j
+                  ? { ...cell, input: e.key, incorrect: false }
+                  : cell
               );
             })
           );
@@ -245,7 +249,7 @@ const Crossword = () => {
           // TODO (option):
           // if current clue filled, move to first empty cell of next clue
         }
-        // return;
+      // return;
     }
   };
 
@@ -279,7 +283,7 @@ const Crossword = () => {
       if (allCorrect) window.alert("congrats lol");
     }, 1000);
     return () => clearTimeout(timer);
-  }, [grid]);
+  }, [grid, solved]);
 
   useEffect(() => {
     localStorage.setItem("grid", JSON.stringify(grid));

@@ -17,12 +17,46 @@
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.21",
     "prettier-plugin-tailwindcss": "^0.2.4",
     "tailwindcss": "^3.2.7",
     "vite": "^4.2.0"
   },
   "prettier": {
-    "plugins": ["prettier-plugin-tailwindcss"]
-  }
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  },
+  "eslintConfig": {
+    "plugins": ["react", "react-hooks"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "react/react-in-jsx-scope": 0,
+      "react/prop-types": 0
+    }
+  },
+  "eslintIgnore": []
 }

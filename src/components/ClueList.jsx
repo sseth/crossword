@@ -68,7 +68,7 @@ const ClueList = ({
   const listStyles = "mb-3 p-2 h-[330px] w-[400px] overflow-scroll";
 
   return (
-    <div className="foc mt-[10px] h-full">
+    <div className="foc mt-[10px] h-full md:hidden lg:block">
       <div>
         <div className="mb-2 border-b text-lg font-bold">Across</div>
         <div ref={acrossListRef} className={listStyles}>

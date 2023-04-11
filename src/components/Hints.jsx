@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Hints = ({ menuProps }) => {
   const { setGrid, cell, clue, dir, setSolved } = menuProps;
